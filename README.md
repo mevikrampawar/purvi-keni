@@ -4,7 +4,7 @@ A zero-build static personal-brand site for **Purvi Keni** — marketing associa
 
 **Design direction:** editorial warm — paper, ink and persimmon; Fraunces display type with Inter body; light and ink themes; subtle motion that respects `prefers-reduced-motion`.
 
-**Status:** v1 built and verified locally. Not yet pushed to GitHub.
+**Live:** <https://mevikrampawar.github.io/purvi-keni/> — v1 deployed on GitHub Pages.
 
 ## Preview locally
 
@@ -33,27 +33,23 @@ robots.txt
 
 ## Deploy to GitHub Pages
 
-1. Create a repository (for example `purvi-keni`) under the account that should own the site.
-2. Initialise and push this folder (only when approved):
+This folder is a git repository tracking [`mevikrampawar/purvi-keni`](https://github.com/mevikrampawar/purvi-keni). Pages builds `main` from the repository root.
 
-   ```bash
-   git init -b main
-   git add .
-   git commit -m "Purvi Keni portfolio v1"
-   git remote add origin https://github.com/<account>/<repo>.git
-   git push -u origin main
-   ```
+To publish changes:
 
-3. In the repository: **Settings → Pages → Build and deployment → Source: Deploy from a branch → `main` / `/ (root)`**.
-4. The site will be at `https://<account>.github.io/<repo>/`.
+```bash
+git add .
+git commit -m "Describe the change"
+git push
+```
 
-No GitHub Actions workflow is required. All asset paths are relative, so the site works from a project subpath. `.nojekyll` keeps the files untouched.
+Pages rebuilds automatically. No GitHub Actions workflow is required. All asset paths are relative, so the site works from a project subpath. `.nojekyll` keeps the files untouched.
 
-### After the first deploy
+### Live URL and social metadata
 
-- Replace the relative `og:image` / `twitter:image` values in `index.html` with the absolute deployed URL (social crawlers generally require absolute image URLs).
-- Add `og:url` and a canonical link with the final URL.
-- Optionally add a `sitemap.xml` once the URL is known.
+- Live site: <https://mevikrampawar.github.io/purvi-keni/>
+- `og:url`, `og:image`, `twitter:image`, the canonical link and the JSON-LD `url` / `image` use that absolute URL.
+- If the site moves to a custom domain, update those values together. A `sitemap.xml` can be added once the final URL is fixed.
 
 ### Social preview image
 
@@ -71,7 +67,7 @@ No GitHub Actions workflow is required. All asset paths are relative, so the sit
 
 - Every metric, role, date, certification and tool on the page comes from `Purvi Keni - Marketing Associate.pdf`.
 - No testimonials, client logos, awards or case-study images have been invented.
-- **Phone number:** the résumé includes `9833228224`, but the public page intentionally omits it to reduce spam exposure. It remains in the downloadable PDF. Confirm with Purvi before publishing the number on the page.
+- **Phone number:** the résumé includes `9833228224`, but the public page intentionally omits it to reduce spam exposure. It remains in the downloadable PDF, and because this repository is public the PDF (and the number in it) is publicly downloadable. Confirm with Purvi before publishing the number on the page.
 - Contact is a `mailto:` form — no backend, no stored data. It opens the visitor's email app with a prefilled draft.
 
 ## Manual checks (no build pipeline)
@@ -98,4 +94,4 @@ No GitHub Actions workflow is required. All asset paths are relative, so the sit
 - A portrait photograph and an about-page narrative.
 - Custom domain.
 - Privacy-friendly analytics, if requested.
-- Absolute social-preview URL and canonical tags for the live domain.
+- Custom domain, then update canonical/OG/JSON-LD URLs.

@@ -87,6 +87,7 @@ Pages rebuilds automatically. No GitHub Actions workflow is required. All asset 
 - Colours, type and spacing: design tokens at the top of `styles.css`.
 - Interactions: `main.js`.
 - Résumé: replace `assets/purvi-keni-resume.pdf` with the same filename.
+- The 404 page links back to `/purvi-keni/`. If the repository is renamed or the site moves to a custom domain, update that base path in `404.html` along with the canonical/OG/JSON-LD URLs.
 
 ## v2 candidates
 

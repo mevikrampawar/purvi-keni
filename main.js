@@ -40,12 +40,30 @@
     });
   }
 
-  /* ---------- scroll state: header, progress, back-to-top ---------- */
+  /* ---------- scroll state: header, progress, back-to-top, timeline ---------- */
 
   var header = document.getElementById("siteHeader");
   var progressBar = document.getElementById("progressBar");
   var toTop = document.getElementById("toTop");
+  var timelineWrap = document.getElementById("timeline");
+  var timelineFill = document.getElementById("timelineFill");
+  var jobEls = timelineWrap ? Array.prototype.slice.call(timelineWrap.querySelectorAll(".job")) : [];
   var ticking = false;
+
+  function updateTimeline() {
+    if (!timelineWrap || !timelineFill) return;
+    var rect = timelineWrap.getBoundingClientRect();
+    var vh = window.innerHeight;
+    var focus = vh * 0.62;
+    var total = rect.height;
+    var passed = Math.min(Math.max(focus - rect.top, 0), total);
+    timelineFill.style.height = ((passed / total) * 100) + "%";
+    jobEls.forEach(function (job) {
+      var r = job.getBoundingClientRect();
+      var active = r.top < focus && r.bottom > focus * 0.3;
+      job.classList.toggle("is-active", active);
+    });
+  }
 
   function onScrollFrame() {
     var y = window.scrollY || window.pageYOffset;
@@ -54,6 +72,8 @@
     if (header) header.classList.toggle("is-scrolled", y > 12);
     if (progressBar) progressBar.style.width = (max > 0 ? (y / max) * 100 : 0) + "%";
     if (toTop) toTop.hidden = y < 640;
+
+    if (!reduceMotion) updateTimeline();
 
     ticking = false;
   }
@@ -68,6 +88,12 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
   onScrollFrame();
+
+  // static timeline for reduced motion: fill rail, mark all active
+  if (reduceMotion && timelineFill) {
+    timelineFill.style.height = "100%";
+    jobEls.forEach(function (job) { job.classList.add("is-active"); });
+  }
 
   if (toTop) {
     toTop.addEventListener("click", function () {
@@ -318,12 +344,18 @@
   var finePointer = window.matchMedia("(pointer: fine)").matches;
 
   if (stack && stackInner && finePointer && !reduceMotion) {
+    var tiltTicking = false;
     stack.addEventListener("pointermove", function (event) {
-      var rect = stack.getBoundingClientRect();
-      var x = (event.clientX - rect.left) / rect.width - 0.5;
-      var y = (event.clientY - rect.top) / rect.height - 0.5;
-      stackInner.style.setProperty("--ry", (x * 10).toFixed(2) + "deg");
-      stackInner.style.setProperty("--rx", (-y * 8).toFixed(2) + "deg");
+      if (tiltTicking) return;
+      tiltTicking = true;
+      window.requestAnimationFrame(function () {
+        var rect = stack.getBoundingClientRect();
+        var x = (event.clientX - rect.left) / rect.width - 0.5;
+        var y = (event.clientY - rect.top) / rect.height - 0.5;
+        stackInner.style.setProperty("--ry", (x * 10).toFixed(2) + "deg");
+        stackInner.style.setProperty("--rx", (-y * 8).toFixed(2) + "deg");
+        tiltTicking = false;
+      });
     });
 
     stack.addEventListener("pointerleave", function () {

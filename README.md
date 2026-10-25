@@ -2,9 +2,9 @@
 
 A zero-build static personal-brand site for **Purvi Keni** — marketing associate, content creator and brand designer based in Mumbai. Built for hiring managers and agencies: selected work, capability, experience and a direct contact route.
 
-**Design direction:** editorial warm — paper, ink and persimmon; Fraunces display type with Inter body; light and ink themes; subtle motion that respects `prefers-reduced-motion`.
+**Design direction:** editorial warm — paper, ink and persimmon; Fraunces display type with Inter body (self-hosted); light and ink themes; subtle motion that respects `prefers-reduced-motion`.
 
-**Live:** <https://mevikrampawar.github.io/purvi-keni/> — v1 deployed on GitHub Pages.
+**Live:** <https://mevikrampawar.github.io/purvi-keni/> — deployed on GitHub Pages.
 
 ## Preview locally
 
@@ -23,10 +23,10 @@ There is no build step and no npm install.
 index.html                  All page content (semantic, single page)
 styles.css                  Design tokens, layout, themes, responsive, print
 main.js                     Theme, menu, reveals, filters, accordions, tilt, form, copy
-favicon.svg                 Asterisk monogram
-404.html                    Branded not-found page
+404.html                    Branded not-found page (self-contained, inline CSS)
 assets/purvi-keni-resume.pdf  Downloadable résumé
 assets/og.png               1200 × 630 social preview image
+assets/fonts/               Self-hosted woff2 (Fraunces subset + Inter latin)
 .nojekyll                   Tells GitHub Pages to serve files as-is
 robots.txt
 ```
@@ -53,15 +53,20 @@ Pages rebuilds automatically. No GitHub Actions workflow is required. All asset 
 
 ### Social preview image
 
-`assets/og.png` (1200 × 630) is included. To regenerate it after a design change, serve the site locally and screenshot the template in `.planning/og-template.html` (local-only, gitignored):
+`assets/og.png` (1200 × 630) is included. To regenerate it after a design change:
 
 ```bash
+# Option A: Chrome headless (local template, self-contained)
 "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
-  --headless=new --hide-scrollbars --force-device-scale-factor=1 \
-  --window-size=1200,630 --virtual-time-budget=6000 \
+  --headless=new --hide-scrollbars --force-device-scale-factor=2 \
+  --window-size=1200,630 \
   --screenshot=assets/og.png \
-  "http://localhost:8080/.planning/og-template.html"
+  "file:///Users/vikrampawar/Documents/AI-Workspace/Projects/purvi_keni_portfolio/.planning/og-template.html"
+
+# Option B: Serve locally and screenshot via Playwright/Puppeteer (if installed)
 ```
+
+The template at `.planning/og-template.html` is local-only (gitignored) and uses system fonts. The live site preloads self-hosted woff2.
 
 ## Content and truth rules
 
@@ -80,6 +85,7 @@ Pages rebuilds automatically. No GitHub Actions workflow is required. All asset 
 - Filters: all five categories and the empty state.
 - Form: invalid name/email/message, then valid submission opens a mail draft.
 - Print: all case-study panels expanded, navigation hidden.
+- Experience timeline: scroll progress rail fills, active job highlights.
 
 ## Editing
 
@@ -88,6 +94,7 @@ Pages rebuilds automatically. No GitHub Actions workflow is required. All asset 
 - Interactions: `main.js`.
 - Résumé: replace `assets/purvi-keni-resume.pdf` with the same filename.
 - The 404 page links back to `/purvi-keni/`. If the repository is renamed or the site moves to a custom domain, update that base path in `404.html` along with the canonical/OG/JSON-LD URLs.
+- Self-hosted fonts: `assets/fonts/fraunces-subset.woff2`, `assets/fonts/fraunces-italic-subset.woff2`, `assets/fonts/inter-latin.woff2`. Preloaded in `index.html` head.
 
 ## v2 candidates
 
@@ -95,4 +102,3 @@ Pages rebuilds automatically. No GitHub Actions workflow is required. All asset 
 - A portrait photograph and an about-page narrative.
 - Custom domain.
 - Privacy-friendly analytics, if requested.
-- Custom domain, then update canonical/OG/JSON-LD URLs.
